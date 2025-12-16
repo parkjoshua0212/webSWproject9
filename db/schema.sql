@@ -1,0 +1,9 @@
+CREATE TABLE expenses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    amount INT NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    date DATE NOT NULL,
+    memo VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
