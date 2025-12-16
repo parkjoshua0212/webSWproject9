@@ -1,6 +1,6 @@
 CREATE TABLE expenses (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
+    title VARCHAR(100) NOT NULL DEFAULT '지출',
     amount INT NOT NULL,
     category VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
