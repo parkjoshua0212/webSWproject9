@@ -2,29 +2,50 @@ import { useEffect, useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import Stats from "./components/Stats";
-// 백엔드 연결용 
-// import { getExpenses, addExpense, deleteExpense } from "./services/api";
+
+// 🔗 백엔드 API 연결
+import {
+  getExpenses,
+  addExpense,
+  deleteExpense,
+} from "./services/api";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
   const [activeTab, setActiveTab] = useState("list");
 
+  // 🔹 최초 로딩 시 DB에서 지출 목록 가져오기
   useEffect(() => {
-    setExpenses([]);
+    const fetchExpenses = async () => {
+      try {
+        const data = await getExpenses();
+        setExpenses(data);
+      } catch (err) {
+        console.error("지출 목록 불러오기 실패", err);
+      }
+    };
+
+    fetchExpenses();
   }, []);
 
-  const handleAdd = (data) => {
-    setExpenses((prev) => [
-      ...prev,
-      {
-        id: Date.now(), // 임시 id
-        ...data,
-      },
-    ]);
+  // 🔹 지출 추가 (DB 저장)
+  const handleAdd = async (expense) => {
+    try {
+      const savedExpense = await addExpense(expense);
+      setExpenses((prev) => [...prev, savedExpense]);
+    } catch (err) {
+      console.error("지출 추가 실패", err);
+    }
   };
 
-  const handleDelete = (id) => {
-    setExpenses((prev) => prev.filter((e) => e.id !== id));
+  // 🔹 지출 삭제 (DB 반영)
+  const handleDelete = async (id) => {
+    try {
+      await deleteExpense(id);
+      setExpenses((prev) => prev.filter((e) => e.id !== id));
+    } catch (err) {
+      console.error("지출 삭제 실패", err);
+    }
   };
 
   return (
@@ -51,10 +72,15 @@ function App() {
       </div>
 
       {activeTab === "list" && (
-        <ExpenseList expenses={expenses} onDelete={handleDelete} />
+        <ExpenseList
+          expenses={expenses}
+          onDelete={handleDelete}
+        />
       )}
 
-      {activeTab === "chart" && <Stats expenses={expenses} />}
+      {activeTab === "chart" && (
+        <Stats expenses={expenses} />
+      )}
     </div>
   );
 }
