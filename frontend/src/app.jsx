@@ -3,7 +3,7 @@ import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import Stats from "./components/Stats";
 
-// 🔗 백엔드 API 연결
+//  백엔드 API 연결
 import {
   getExpenses,
   addExpense,
@@ -14,7 +14,7 @@ function App() {
   const [expenses, setExpenses] = useState([]);
   const [activeTab, setActiveTab] = useState("list");
 
-  // 🔹 최초 로딩 시 DB에서 지출 목록 가져오기
+  // 최초 로딩 시 DB에서 지출 목록 가져오기
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
@@ -28,7 +28,7 @@ function App() {
     fetchExpenses();
   }, []);
 
-  // 🔹 지출 추가 (DB 저장)
+  // 지출 추가 (DB 저장)
   const handleAdd = async (expense) => {
     try {
       const savedExpense = await addExpense(expense);
@@ -38,7 +38,7 @@ function App() {
     }
   };
 
-  // 🔹 지출 삭제 (DB 반영)
+  // 지출 삭제 (DB 반영)
   const handleDelete = async (id) => {
     try {
       await deleteExpense(id);
